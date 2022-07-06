@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
-    #redirects to index page if not logged in
-    before_action :require_no_user!
+    # redirects to index page if not logged in
+    before_action :require_logged_out
 
     def index
         @users = User.all
@@ -12,12 +12,14 @@ class UsersController < ApplicationController
         
         if @user.save
             login_user!(@user)
-            redirect_to user_url(@user)
+            redirect_to cats_url
         else
-            render json: @user.errors.full_messages,  status: :unprocessable_entity
+            flash.now[:errors] = @user.errors.full_messages
+            render :new
         end
     end
 
+    
 
     private
     def user_params

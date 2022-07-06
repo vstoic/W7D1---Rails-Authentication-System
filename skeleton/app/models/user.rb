@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: users
+#
+#  id              :bigint           not null, primary key
+#  username        :string           not null
+#  password_digest :string           not null
+#  session_token   :string           not null
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+
+
 class User < ApplicationRecord
     #callback to ensure that session token is present
     after_initialize :ensure_session_token
@@ -13,7 +25,7 @@ class User < ApplicationRecord
     def self.find_by_credentials(username, password)
         user = User.find_by(username: username)
 
-        if user && user.check_password?(password)
+        if user && user.is_password?(password)
             user
         else
             nil
@@ -21,7 +33,7 @@ class User < ApplicationRecord
     end
 
     #This is checking to see if the password in the database matches our password?
-    def check_password?(password)
+    def is_password?(password)
         password_object = BCrypt::Password.new(self.password_digest)
         password_object.is_password?(password)
     end
@@ -30,7 +42,6 @@ class User < ApplicationRecord
     def password=(password)
         # puts "setter being called"
         @password = password
-
         self.password_digest = BCrypt::Password.create(password)
     end
 

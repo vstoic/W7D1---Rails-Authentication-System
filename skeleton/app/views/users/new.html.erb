@@ -1,0 +1,16 @@
+
+
+
+<%=render "shared/errors"%>
+
+<form action="<%= users_url %>" method="post">
+    <label>Username:</label>
+        <input type="text" name="user[username]" id="">
+    <br/>
+
+    <label>Password: </label>
+        <input type="password" name="user[password]" value="">
+    <br/>
+
+    <input type="submit" value="Create User">
+</form>
